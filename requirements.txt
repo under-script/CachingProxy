@@ -1,0 +1,10 @@
+Django
+djangorestframework
+drf-spectacular
+drf-spectacular-sidecar
+django-jazzmin
+django-extensions
+drf-material
+requests
+icecream
+beautifulsoup4
