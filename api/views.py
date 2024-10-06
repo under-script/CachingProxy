@@ -4,7 +4,7 @@ import os
 import json
 import logging
 from urllib.parse import urlparse, urljoin
-import hashlib
+import re
 
 # Set up logging
 logging.basicConfig(level=logging.INFO)
@@ -19,9 +19,11 @@ os.makedirs(CACHE_DIR, exist_ok=True)
 def get_cache_file_path(path, origin_url):
     """Generate a file path for the cached JSON content based on the request path and origin."""
     sanitized_origin = urlparse(origin_url).netloc.replace(':', '_')
-    # Use a hash of the path to avoid excessively long file names
-    hash_name = hashlib.md5(path.encode('utf-8')).hexdigest()
-    return os.path.join(CACHE_DIR, sanitized_origin, f'{hash_name}.json')
+
+    # Sanitize the path to create a valid filename
+    sanitized_path = re.sub(r'[^\w\-_.]', '_', path.strip('/'))
+
+    return os.path.join(CACHE_DIR, sanitized_origin, f'{sanitized_path}.json')
 
 
 def cache_view(request):
